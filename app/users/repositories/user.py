@@ -1,7 +1,7 @@
 # user_management/repositories.py
 from users.models import User
-from users.utils.helpers import generate_reset_token
 from django.core.exceptions import ValidationError
+
 
 class UserRepository:
     def get_user_by_id(self, user_id):
@@ -35,7 +35,7 @@ class UserRepository:
 
     def update_user(self, user_id, email, first_name='', last_name=''):
         user = self.get_user_by_id(user_id)
-        
+
         if user:
             user.email = email
             user.first_name = first_name

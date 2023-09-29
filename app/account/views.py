@@ -1,10 +1,9 @@
 # Start of Import
-from utils.response import ApiResponse 
+from utils.response import ApiResponse
 from rest_framework.views import APIView
 from rest_framework import generics, status
 from account.serializers import LoginSerializer
 # from rest_framework.authtoken.models import Token
-from users.serializers import CreateUserSerializer
 from users.repositories.user import UserRepository
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -21,6 +20,8 @@ from users.serializers import CreateUserSerializer, UserSerializer
     ***JWT (JSON Web Tokens) TokenObtainPairView vis simplejwt
     and others
 """
+
+
 class UserLoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
     permission_classes = (AllowAny,)
@@ -36,15 +37,16 @@ class UserLoginView(TokenObtainPairView):
                 return ApiResponse.success(tokens)
             else:
                 return ApiResponse.error(
-                    data={'error': 'Token not found'}, 
+                    data={'error': 'Token not found'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            
+
         else:
             return ApiResponse.error(
-                data=serializer.errors, 
+                data=serializer.errors,
                 status=status.HTTP_401_UNAUTHORIZED
             )
+
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
@@ -53,11 +55,11 @@ class UserProfileView(APIView):
         user = request.user
         serializer = UserSerializer(user)  # Serialize the user data
         return ApiResponse.success(
-            data=serializer.data, 
-            message="User profile fetch successfully", 
+            data=serializer.data,
+            message="User profile fetch successfully",
             status=status.HTTP_200_OK
         )
-    
+
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = CreateUserSerializer
@@ -72,21 +74,22 @@ class UserRegistrationView(generics.CreateAPIView):
 
             if user:
                 return ApiResponse.success(
-                    data=serializer.validated_data, 
-                    message="User profile created successfully", 
+                    data=serializer.validated_data,
+                    message="User profile created successfully",
                     status=status.HTTP_201_CREATED
                 )
             else:
                 return ApiResponse.error(
-                    data={"error": "User with this email already exists."}, 
+                    data={"error": "User with this email already exists."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
         else:
             return ApiResponse.error(
-                data=serializer.errors, 
+                data=serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
-                
+
+
 class UserLogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -99,9 +102,9 @@ class UserLogoutView(APIView):
                 data={"message": "logged out successfully"},
                 status=status.HTTP_205_RESET_CONTENT
             )
-        
+
         except Exception as e:
             return ApiResponse.error(
-                data=str(e), 
+                data=str(e),
                 status=status.HTTP_400_BAD_REQUEST
             )

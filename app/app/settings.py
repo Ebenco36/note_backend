@@ -42,9 +42,9 @@ INSTALLED_APPS = [
     'notes.apps.NotesConfig',
     'users.apps.UsersConfig',
     'rest_framework_simplejwt.token_blacklist',
-    'rest_framework_swagger', # Swagger
+    'rest_framework_swagger',  # Swagger
     'corsheaders',
-    'drf_yasg', # Yet Another Swagger generator
+    'drf_yasg',  # Yet Another Swagger generator
     'taggit',
 ]
 
@@ -150,7 +150,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny'
@@ -174,7 +173,7 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-   "http://localhost:8080",
+    "http://localhost:8080",
 ]
 
 TAGGIT_CASE_INSENSITIVE = True

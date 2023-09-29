@@ -3,6 +3,8 @@ from notes.models import Note
 # Register your models here.
 
 admin.site.register(Note)
+
+
 class NoteAdmin(admin.ModelAdmin):
     list_display = ["user", "title", "tag_list"]
 

@@ -1,7 +1,15 @@
 from rest_framework.response import Response
 
+
 class ApiResponse(Response):
-    def __init__(self, data=None, status=None, message=None, success=True, **kwargs):
+    def __init__(
+            self,
+            data=None,
+            status=None,
+            message=None,
+            success=True,
+            **kwargs
+    ):
         content = {
             "success": success,
             "message": message,

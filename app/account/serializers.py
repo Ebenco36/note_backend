@@ -4,6 +4,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 """
     Note that serializer to create a new user already exist with the Users App
 """
+
+
 class LoginSerializer(TokenObtainPairSerializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
@@ -18,7 +20,6 @@ class LoginSerializer(TokenObtainPairSerializer):
             raise serializers.ValidationError({
                 'message': 'Must include "email" and "password".'
             })
-        
+
         data['token'] = token
         return data
-

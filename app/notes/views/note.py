@@ -23,8 +23,8 @@ class NoteListCreateView(generics.ListCreateAPIView):
 
 
     def get_queryset(self):
-        query = self.request.query_params.get('q', '').strip() # remove extras
-        tag = self.request.query_params.get('tag', "") # remove extras
+        query = self.request.query_params.get('q', '').strip()  # remove extras
+        tag = self.request.query_params.get('tag', "")  # remove extras
 
         # Create a Q object to combine search conditions
         q_objects = Q()
@@ -42,12 +42,12 @@ class NoteListCreateView(generics.ListCreateAPIView):
             queryset = NoteRepository.filter_note(q_objects)
 
         return queryset
-    
+
     # The get method handles GET requests to list objects
     def get(self, request, *args, **kwargs):
         # Retrieve the queryset based on the view's queryset attribute
         queryset = self.get_queryset()
-        
+
         # Serialize the queryset data
         serializer = self.get_serializer(queryset, many=True)
         

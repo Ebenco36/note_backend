@@ -12,7 +12,9 @@ def step_user_logged_in(context):
     return True
 
 
-@when('the user creates a new note with title "{title}" and body "{body}" and tags "{tags}"')
+@when('the user creates a new note with title \
+      "{title}" and body "{body}" and tags "{tags}"'
+      )
 def step_create_new_note(context, title, body, tags):
     pass
 
@@ -27,7 +29,9 @@ def step_check_note_tags(context, tags):
     pass
 
 
-@when('the user edits the note with title "{title}" and updates the body to "{new_body}"')
+@when('the user edits the note with title \
+      "{title}" and updates the body to "{new_body}"'
+      )
 def step_edit_existing_note(context, title, new_body):
     pass
 

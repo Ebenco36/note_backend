@@ -4,5 +4,3 @@ exclude =
   __pycache__,
   manage.py,
   settings.py
-  features\steps\notes.py
-  notes\tests.py

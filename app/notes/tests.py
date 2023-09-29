@@ -33,21 +33,27 @@ class NoteCreationTestCase(APITestCase):
         self.tag1 = Tag.objects.create(name='tag1')
         self.tag2 = Tag.objects.create(name='tag2')
 
-        self.user1_auth = self.client.post("http://127.0.0.1:8000/api/auth/login/", {
-            'email': "testuser1@oal.com",
-            'password': 'password1'
-        })
+        self.user1_auth = self.client.post(
+            "http://127.0.0.1:8000/api/auth/login/",
+            {
+                'email': "testuser1@oal.com",
+                'password': 'password1'
+            }
+        )
 
-        self.user2_auth = self.client.post("http://127.0.0.1:8000/api/auth/login/", {
-            'email': "testuser2@oal.com",
-            'password': 'password2'
-        })
+        self.user2_auth = self.client.post(
+            "http://127.0.0.1:8000/api/auth/login/",
+            {
+                'email': "testuser2@oal.com",
+                'password': 'password2'
+            }
+        )
 
     def test_create_note_with_tags(self):
         # Log in as user1
         resp = self.user1_auth.json()
-        user1_token = resp.get('data').get(
-            'access') if 'data' in resp and 'access' in resp.get('data') else ""
+        user1_token = resp.get('data').get('access') \
+            if 'data' in resp and 'access' in resp.get('data') else ""
 
         # Create a note with tags
         response = self.client.post(URL + '/lists-create/', {
@@ -62,13 +68,16 @@ class NoteCreationTestCase(APITestCase):
     def test_edit_own_note(self):
         # Create a note owned by user1
         note = Note.objects.create(
-            title='User1 Note', body='This note belongs to user1', user=self.user1)
+            title='User1 Note',
+            body='This note belongs to user1',
+            user=self.user1
+        )
         note.tags.set([self.tag1])
 
         # Log in as user1
         resp = self.user1_auth.json()
-        user1_token = resp.get('data').get(
-            'access') if 'data' in resp and 'access' in resp.get('data') else ""
+        user1_token = resp.get('data').get('access') \
+            if 'data' in resp and 'access' in resp.get('data') else ""
 
         # Edit user1's own note
         response = self.client.patch(URL + f'/note/{note.id}/', {
@@ -86,13 +95,16 @@ class NoteCreationTestCase(APITestCase):
     def test_edit_other_users_note(self):
         # Create a note owned by user1
         note = Note.objects.create(
-            title='User1 Note', body='This note belongs to user1', user=self.user1)
+            title='User1 Note',
+            body='This note belongs to user1',
+            user=self.user1
+        )
         note.tags.set([self.tag1])
 
         # Log in as user2
         resp = self.user2_auth.json()
-        user2_token = resp.get('data').get(
-            'access') if 'data' in resp and 'access' in resp.get('data') else ""
+        user2_token = resp.get('data').get('access') \
+            if 'data' in resp and 'access' in resp.get('data') else ""
 
         # Attempt to edit user1's note
         response = self.client.patch(URL + f'/note/{note.id}/', {
@@ -107,17 +119,22 @@ class NoteCreationTestCase(APITestCase):
     def test_delete_own_note(self):
         # Create a note owned by user1
         note = Note.objects.create(
-            title='User1 Note', body='This note belongs to user1', user=self.user1)
+            title='User1 Note',
+            body='This note belongs to user1',
+            user=self.user1
+        )
         note.tags.set([self.tag1])
 
         # Log in as user1
         resp = self.user1_auth.json()
-        user1_token = resp.get('data').get(
-            'access') if 'data' in resp and 'access' in resp.get('data') else ""
+        user1_token = resp.get('data').get('access') \
+            if 'data' in resp and 'access' in resp.get('data') else ""
 
         # Delete user1's own note
         response = self.client.delete(
-            URL + f'/note/{note.id}/', HTTP_AUTHORIZATION=f'Bearer {user1_token}')
+            URL + f'/note/{note.id}/',
+            HTTP_AUTHORIZATION=f'Bearer {user1_token}'
+        )
 
         # Check if the note was deleted successfully
         self.assertEqual(response.status_code, 204)
@@ -126,17 +143,22 @@ class NoteCreationTestCase(APITestCase):
     def test_delete_other_users_note(self):
         # Create a note owned by user1
         note = Note.objects.create(
-            title='User1 Note', body='This note belongs to user1', user=self.user1)
+            title='User1 Note',
+            body='This note belongs to user1',
+            user=self.user1
+        )
         note.tags.set([self.tag1])
 
         # Log in as user2
         resp = self.user2_auth.json()
-        user2_token = resp.get('data').get(
-            'access') if 'data' in resp and 'access' in resp.get('data') else ""
+        user2_token = resp.get('data').get('access') \
+            if 'data' in resp and 'access' in resp.get('data') else ""
 
         # Attempt to delete user1's note
         response = self.client.delete(
-            URL + f'/note/{note.id}/', HTTP_AUTHORIZATION=f'Bearer {user2_token}')
+            URL + f'/note/{note.id}/',
+            HTTP_AUTHORIZATION=f'Bearer {user2_token}'
+        )
 
         # Check if the delete request is denied due to object-level permissions
         self.assertEqual(response.status_code, 403)
